@@ -1,179 +1,137 @@
-const people = [
+const questions = [
     {
-        firstName: "John",
-        lastName: "Doe",
-        image: "https://images.unsplash.com/photo-1564564295391-7f24f26f568b",
-        city: "New York",
-        country: "USA",
+        question: "What is the capital of France?",
+        answers: {
+            a:"Berlin",
+            b:"Madrid",
+            c:"Paris",
+            d:"Rome",
+        },
+        correct: "Paris",
     },
     {
-        firstName: "Michael",
-        lastName: "Smith",
-        image: "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d",
-        city: "Berlin",
-        country: "Germany",
+        question: "What is the hardest natural substance on Earth?",
+        answers: {
+            a:"gold",
+            b:"iron",
+            c:"diamond",
+            d:"platinum",
+        },
+        correct: "diamond",
     },
     {
-        firstName: "William",
-        lastName: "Moore",
-        image: "https://images.unsplash.com/photo-1552058544-f2b08422138a",
-        city: "Dublin",
-        country: "Ireland",
+        question: "What color is a Himalayan Puppy?",
+        answers: {
+            a:"blue",
+            b:"green",
+            c:"red",
+            d:"white",
+        },
+        correct: "white",
     },
     {
-        firstName: "Lucas",
-        lastName: "White",
-        image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
-        city: "Vancouver",
-        country: "Canada",
-    },
-
-    {
-        firstName: "Sophia ",
-        lastName: "Martinez ",
-        image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
-        city: "Madrid",
-        country: "Spain",
-    },
-
-    {
-        firstName: "Olivia  ",
-        lastName: "Taylor",
-        image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
-        city: "London",
-        country: "United Kingdom",
-    },
-
-    {
-        firstName: "Harper   ",
-        lastName: "Walker ",
-        image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
-        city: "Edinburgh",
-        country: "Scotland",
+        question: "What is the capital of France?",
+        answers: {
+            a:"Berlin",
+            b:"Rome",
+            c:"Paris",
+            d:"London",
+        },
+        correct: "Paris",
     },
     {
-        firstName: "Amelia    ",
-        lastName: "Clark  ",
-        image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
-        city: "Wellington",
-        country: "New Zealand",
-    },
-    {
-        firstName: "Ethan    ",
-        lastName: "Lee  ",
-        image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
-        city: "Seoul",
-        country: "South Korea",
-    },
-
-    {
-        firstName: "Charlotte",
-        lastName: "Harris",
-        image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
-        city: "Melbourne",
-        country: "Australia",
-    },
-    {
-        firstName: "Emma",
-        lastName: "Johnson ",
-        image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
-        city: "New York",
-        country: "USA",
-    },
-    {
-        firstName: "Noah ",
-        lastName: "Brown ",
-        image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
-        city: "Toronto",
-        country: "Canada",
-    },
-    {
-        firstName: "Benjamin ",
-        lastName: "Thomas ",
-        image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
-        city: "Paris",
-        country: "France",
-    },
-    {
-        firstName: "Emma  ",
-        lastName: "Johnson ",
-        image:  "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde",
-        city: "London",
-        country: "United Kingdom",
-    },
-    {
-        firstName: "Abigail  ",
-        lastName: "King",
-        image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
-        city: "Los Angeles",
-        country: "USA",
+        question: "Who is known as the Father of Computers?",
+        answers: {
+            a:"Charles Babbage",
+            b:"Bill Gates",
+            c:"Alan Turing",
+            d:"Steve Jobs",
+        },
+        correct: "Charles Babbage",
     },
 ];
-const searchInput = document.getElementById("search");
-const usersContainer = document.getElementById("users");
 
-searchInput.addEventListener("input", (event) => {
-let givenValue = event.target.value.trim().toLowerCase();
+const totalQuestions = document.getElementById("total");
+const currentQuestions = document.getElementById("current");
+const questionContainer = document.getElementById("questionContainer");
+const question = document.getElementById("question");
+const answerBtns = document.querySelectorAll(".answer");
 
-if(givenValue.includes("")) {
-    givenValue = givenValue.split(" ");
+let index;
+if (localStorage.getItem("currentIndex")) {
+    index = JSON.parse(localStorage.getItem("currentIndex"));
+} else {
+    index = 0;
 }
 
-let filteredUsers;
+totalQuestions.textContent = questions.length;
+currentQuestions.textContent = index + 1;
 
-if(typeof givenValue === 'string') {
-    filteredUsers = people.filter((person) => {
-        const {firstName, lastName, city, country} = person;
-    
-        return (
-            firstName.toLocaleLowerCase().includes(givenValue) ||
-            lastName.toLocaleLowerCase().includes(givenValue) ||
-            city.toLocaleLowerCase().includes(givenValue) ||
-            country.toLocaleLowerCase().includes(givenValue)
-        );
+const getRandomColor = () => {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    const color = `rgb(${r}, ${g}, ${b})`;
+
+    const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+    const textColor = luminance > 186 ? "black" : "white";
+
+    return { backgroundColor: color, textColor: textColor };
+};
+
+const displayQuestion = () => {
+    question.textContent = questions[index].question;
+
+    const { backgroundColor, textColor } = getRandomColor();
+    questionContainer.style.backgroundColor = backgroundColor;
+    questionContainer.style.color = textColor;
+
+    const [a, b, c, d] = answerBtns;
+    a.textContent = questions[index].answers.a;
+    b.textContent = questions[index].answers.b;
+    c.textContent = questions[index].answers.c;
+    d.textContent = questions[index].answers.d;
+
+    currentQuestions.textContent = index + 1;
+    localStorage.setItem("currentIndex", index);
+};
+
+const clearAnswerStyles = () => {
+    answerBtns.forEach((answerBtn) => {
+        answerBtn.classList.remove("bg-red-500", "bg-green-500");
     });
-} 
+};
 
-else {
-    filteredUsers = people.filter((person) => {
-        const {firstName, lastName, city, country} = person;
-        return givenValue.every((singleValue) => {
-            return (
-                firstName.toLocaleLowerCase().includes(singleValue) ||
-                lastName.toLocaleLowerCase().includes(singleValue) ||
-                city.toLocaleLowerCase().includes(singleValue) ||
-                country.toLocaleLowerCase().includes(singleValue)
-            );
-        })
-   
-    })
-}
+answerBtns.forEach((answerBtn) => {
+    answerBtn.addEventListener("click", (event) => {
+        const givenAnswer = answerBtn.textContent;
+        const correctAnswer = questions[index].correct;
 
+        const correctAnswerElement = [...answerBtns].find(
+            (answerBtn) => answerBtn.textContent === correctAnswer
+        );
 
-displayUsers(filteredUsers);         //search-de yazdiqca uygun olani taapz
+        if (correctAnswer === givenAnswer) {
+            answerBtn.classList.add("bg-green-500");
+        } else {
+            answerBtn.classList.add("bg-red-500");
+            setTimeout(() => {
+                correctAnswerElement.classList.add("bg-green-500");
+            }, 500);
+        }
+
+        if (index < questions.length - 1) {
+            index++;
+        } else {
+            index = 0; // Loop back to the first question
+        }
+        localStorage.setItem("currentIndex", index);
+
+        setTimeout(() => {
+            clearAnswerStyles();
+            displayQuestion();
+        }, 3000); // 3 seconds delay to show the next question
+    });
 });
 
-
-const displayUsers = (users) => {
-    usersContainer.innerHTML = "";
-
-    if(users.length === 0) {
-        usersContainer.innerHTML = "User not found";
-    }
-    users.forEach((person) => {
-        usersContainer.innerHTML +=`<div class="bg-[#f1f3f5] flex items-center gap-3 p-2 rounded-md ">
-        <!-- Image -->
-        <div class="h-20 w-20 shrink-0">
-        <img src="${person.image}" alt="${person.firstName} ${person.lastName}" class="h-full w-full rounded-full object-cover"/>
-        </div>
-        
-        <!-- Credentials -->
-        <div>
-        <h3 class="text-lg">${person.firstName}${person.lastName}</h3>
-        <p class="text-xs">${person.city}, ${person.country}</p>
-        
-        </div>
-        </div>`
-    })
-}
-displayUsers();
+displayQuestion();
