@@ -1,31 +1,50 @@
-const daysEl = document.getElementById("days");
-const hoursEl = document.getElementById("hours");
-const minsEl = document.getElementById("mins");
-const secondsEl = document.getElementById("seconds");
+const textEl = document.querySelector("p");
+const btns = document.querySelectorAll("button");
+
+const [italicBtn, boldBtn, colorBtn, backgroundBtn, resetBtn, customBtn] = btns;
+
+class App {
+    constructor() {
+        this.key;
+        this.value;
+    italicBtn.addEventListener("click",this.toggleItalic.bind(this));
+    boldBtn.addEventListener("click",this.toggleBold.bind(this));
+    colorBtn.addEventListener("click",this.changeColor.bind(this));
+    backgroundBtn.addEventListener("click",this.changeBgColor.bind(this));
+    customBtn.addEventListener("click",this.addCustomStyle.bind(this));
+    resetBtn.addEventListener("click",this.resetStyles.bind(this));
 
 
-const worldCup = new Date(2026, 5, 11);
+    }
 
-const timer = (date) => {
-    const now = new Date();
-    const timeDiff = date - now;
-
-    const oneDay = 24 * 3600 * 1000;
-    const days = Math.floor(timeDiff / oneDay);
-    const hours = Math.floor(timeDiff / 1000 / 60 / 60) % 24;
-    const minutes = Math.floor(timeDiff / 1000 / 60) % 60;
-    const seconds = Math.floor(timeDiff / 1000) % 60;
-
-    console.log(days);
-
-    daysEl.textContent = days;
-    hoursEl.textContent = String(hours).padStart(2, 0);
-    minsEl.textContent = String(minutes).padStart(2, 0);
-    secondsEl.textContent = String(seconds).padStart(2, 0);
+toggleItalic() {
+    textEl.classList.toggle("italic");
 }
 
-timer(worldCup);
+toggleBold() {
+    textEl.classList.toggle("bold");
+}
 
-setInterval(() => {
-    timer(worldCup);
-},1000);
+changeColor() {
+    this.color = prompt("Please enter a valid color");
+    textEl.style.color = this.color;
+}
+
+changeBgColor() {
+    this.backgroundColor = prompt("Please enter a valid color");
+    textEl.style.backgroundColor = this.backgroundColor;
+}
+addCustomStyle() {
+    this.key = prompt("Please enter a property you want to change");
+    this.value = prompt(`Please enter a value you want to set to ${this.key}`);
+    textEl.style[this.key] = this.value;
+}
+
+resetStyles() {
+    textEl.classList.remove("italic", "bold");
+    textEl.style.color ="#000";
+    textEl.style.background = "none";
+}
+}
+
+const app = new App ();
