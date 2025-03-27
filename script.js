@@ -2,6 +2,7 @@ const daysEl = document.getElementById("days");
 const hoursEl = document.getElementById("hours");
 const minsEl = document.getElementById("mins");
 const secondsEl = document.getElementById("seconds");
+const worldEl = document.getElementById("worldCup")
 
 
 const worldCup = new Date(2026, 5, 11);
@@ -17,7 +18,7 @@ const timer = (date) => {
     const seconds = Math.floor(timeDiff / 1000) % 60;
 
     console.log(days);
-
+    worldEl.textContent = "2026.06.11"
     daysEl.textContent = days;
     hoursEl.textContent = String(hours).padStart(2, 0);
     minsEl.textContent = String(minutes).padStart(2, 0);
